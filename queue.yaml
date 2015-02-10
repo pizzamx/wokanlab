@@ -1,0 +1,5 @@
+﻿queue:
+- name: hd-section-queue
+  rate: 1/s
+- name: hd-detail-queue
+  rate: 5/s

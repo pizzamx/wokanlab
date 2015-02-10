@@ -1,0 +1,20 @@
+## -*- coding: utf-8 -*-
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:thr="http://purl.org/syndication/thread/1.0" xml:base="/hd/feed">
+    <title>海峡都市报</title>
+    <updated>${now}</updated>
+	<id>/hd/feed</id>
+    <author>
+        <name>pizza</name>
+        <email>root@wokanxing.info</email>
+    </author>
+    % for item in data:    
+        <entry>
+            <title>[${item.date.date()}][${item.section}]${item.title}</title>
+            <id>${item.url}</id>
+            <link href="${item.url}"/>
+            <updated>${item.date.isoformat()}</updated>
+            <summary type="html"><![CDATA[${item.content}]]></summary>
+        </entry>
+    % endfor
+</feed>

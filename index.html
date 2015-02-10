@@ -1,0 +1,646 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7; IE=EmulateIE9"> 
+        <!--[if IE]><script src="/static/excanvas.compiled.js"></script><![endif]-->
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+		<link rel="stylesheet" href="/assets/style.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript" src="/static/dygraph-combined.js"></script>
+		<script type="text/javascript">
+			//google.load('visualization', '1', {packages: ['annotatedtimeline'], 'language' : 'zh_CN'});
+			//google.load('visualization', '1', {packages: ['imagelinechart'], 'language' : 'zh_CN'});
+			var atl1 = null, atl2 = null, alt3 = null, alt4 = null;
+			var chart1Ready = false, chart2Ready = false, chart3Ready = false, chart4Ready = false;
+            var cols = ['期房可售房屋套数', '期房可售房屋面积', '期房可售住宅套数', '期房可售住宅面积', 
+                        '期房网上认购套数', '期房网上认购面积', '期房住宅认购套数', '期房住宅认购面积', 
+                        '期房网上签约套数', '期房网上签约面积', '期房住宅签约套数', '期房住宅签约面积', 
+                        '现房未签约套数', '现房未签约面积', '现房未签约住宅套数', '现房未签约住宅面积', 
+                        '现房网上认购套数', '现房网上认购面积', '现房住宅认购套数', '现房住宅认购面积', 
+                        '现房网上签约套数', '现房网上签约面积', '现房住宅签约套数', '现房住宅签约面积', 
+                        '现房现房项目个数', '现房楼栋个数', '现房初始登记面积', 
+                        '存量房可售房源套数', '存量房可售住宅套数', '存量房可售住宅面积', 
+                        '存量房新发布房源套数', '存量房新发布住宅套数', '存量房新发布住宅面积', 
+                        '存量房网上签约套数', '存量房住宅签约套数', '存量房住宅签约面积'];
+            var cols2 = ['期房可售房屋套数环比', '期房可售房屋面积环比', '期房可售住宅套数环比', '期房可售住宅面积环比', 
+                         '期房可售房屋套数同比', '期房可售房屋面积同比', '期房可售住宅套数同比', '期房可售住宅面积同比',
+                         '期房网上认购套数环比', '期房网上认购面积环比', '期房住宅认购套数环比', '期房住宅认购面积环比', 
+                         '期房网上认购套数同比', '期房网上认购面积同比', '期房住宅认购套数同比', '期房住宅认购面积同比', 
+                         '期房网上签约套数环比', '期房网上签约面积环比', '期房住宅签约套数环比', '期房住宅签约面积环比', 
+                         '期房网上签约套数同比', '期房网上签约面积同比', '期房住宅签约套数同比', '期房住宅签约面积同比', 
+                         '批准预售许可证环比', '批准预售面积环比', '批准住宅套数环比', '批准住宅面积环比',
+                         '批准预售许可证同比', '批准预售面积同比', '批准住宅套数同比', '批准住宅面积同比', 
+                         '现房未签约套数环比', '现房未签约面积环比', '现房未签约住宅套数环比', '现房未签约住宅面积环比', 
+                         '现房未签约套数同比', '现房未签约住宅套数同比', '现房未签约面积同比', '现房未签约住宅面积同比', 
+                         '现房网上认购套数环比', '现房网上认购面积环比', '现房住宅认购套数环比', '现房住宅认购面积环比', 
+                         '现房网上认购套数同比', '现房网上认购面积同比', '现房住宅认购套数同比', '现房住宅认购面积同比',
+                         '现房网上签约套数环比', '现房网上签约面积环比', '现房住宅签约套数环比', '现房住宅签约面积环比', 
+                         '现房网上签约套数同比', '现房网上签约面积同比', '现房住宅签约套数同比', '现房住宅签约面积同比',
+                         '现房现房项目个数环比', '现房楼栋个数环比', '现房初始登记面积环比', 
+                         '现房现房项目个数同比', '现房楼栋个数同比', '现房初始登记面积同比', 
+                         '存量房可售房源套数环比', '存量房可售住宅套数环比', '存量房可售住宅面积环比', 
+                         '存量房可售房源套数同比', '存量房可售住宅套数同比', '存量房可售住宅面积同比', 
+                         '存量房新发布房源套数环比', '存量房新发布住宅套数环比', '存量房新发布住宅面积环比', 
+                         '存量房新发布房源套数同比', '存量房新发布住宅套数同比', '存量房新发布住宅面积同比', 
+                         '存量房网上签约套数环比', '存量房住宅签约套数环比', '存量房住宅签约面积环比',
+                         '存量房网上签约套数同比', '存量房住宅签约套数同比', '存量房住宅签约面积同比']; 
+            var cols3 = ['期房可售房屋套数', '期房可售房屋面积', '期房可售住宅套数', '期房可售住宅面积', 
+                         '期房网上认购套数', '期房网上认购面积', '期房住宅认购套数', '期房住宅认购面积', 
+                         '期房网上签约套数', '期房网上签约面积', '期房住宅签约套数', '期房住宅签约面积', 
+                         '现房未签约套数', '现房未签约面积', '现房未签约住宅套数', '现房未签约住宅面积', 
+                         '现房网上认购套数', '现房网上认购面积', '现房住宅认购套数', '现房住宅认购面积', 
+                         '现房网上签约套数', '现房网上签约面积', '现房住宅签约套数', '现房住宅签约面积', 
+                         '现房现房项目个数', '现房楼栋个数', '现房初始登记面积', 
+                         '批准预售许可证数', '批准预售面积', '批准住宅套数数', '批准住宅面积',
+                         '存量房可售房源套数', '存量房可售住宅套数', '存量房可售住宅面积', 
+                         '存量房新发布房源套数', '存量房新发布住宅套数', '存量房新发布住宅面积', 
+                         '存量房网上签约套数', '存量房住宅签约套数', '存量房住宅签约面积'];
+
+			function drawVisualization(city) {
+				atl1 = null;
+				chart1Ready = false;
+				$('#visualization').html('<span style="font-size: 30px;">请等一下啊！</div>')
+                
+				$.post("/weather/history/" + city, {}, function(resp){
+                    /*
+					var table = new google.visualization.DataTable();
+					table.addColumn('date', '时间');
+					table.addColumn('number', '最低温度');
+					table.addColumn('number', '最高温度');
+					table.addColumn('number', '最大风力');
+					table.addColumn('number', '最大降水');
+					table.addColumn('number', '最大湿度');
+					*/
+					
+					var data = [];
+					var v, dp, m;
+					for(var d in resp.data){
+						dp = new Date(Date.parse(d));
+                        dp.setMinutes(0);
+						v = resp.data[d];
+                        m = (v[0] + v[1]) / 2;
+						data.push([dp, [m, m - v[0]], [v[2], 0], [v[3], 0], [v[4], 0]]);
+					}
+                    data.sort(function(a,b){return a[0] > b[0] ? 1 : a[0] < b[0] ? -1 : 0;});
+					//table.addRows(data);
+					//atl1 = new google.visualization.AnnotatedTimeLine(document.getElementById('visualization'));
+                    atl1 = new Dygraph(
+                        document.getElementById('visualization'),
+                        data,
+                        //'displayAnnotations': true, 
+                        //dateFormat: 'yyyy年MM月dd日 E', 
+                        {
+                            labels: [ "日期", "温度", "最大风力", "最大降水", "最大湿度"],
+                            errorBars: true,
+                            rollPeriod: 5, 
+                            showRoller: true,
+                            legend: 'always',
+                            //labelsDivStyles: {'textAlign': 'right'},
+                            xAxisLabelWidth: 70,
+                            axes: {
+                                x: {
+                                    axisLabelFormatter: function(d, gran) {
+                                      return d.getFullYear() + "年" + (d.getMonth() + 1) + "月";
+                                    }
+                                }
+                            }
+                        }
+                    );
+					//google.visualization.events.addListener(atl1, 'ready', function() {
+					chart1Ready = true;
+    				$('#weather_tab :checkbox').each(function(i){
+						if (this.checked) {
+							atl1.setVisibility(i, true);
+						}else{
+							atl1.setVisibility(i, false);
+						}
+    				});
+					//});
+
+				}, "json");
+			}
+			
+			function d2(pa) {
+				atl2 = null;
+				chart2Ready = false;
+                
+				$.post('/house/dailyhistory/', {'indices': pa.join(':'), 'hideWeekend': $('#hide_weekend1_all').attr('checked')}, function(resp){
+					var table = new google.visualization.DataTable();
+					table.addColumn('date', '时间');
+                    jQuery.each(pa, function(){
+    					table.addColumn('number', cols[this]);
+                    });
+					
+					var count = 1000;
+					var data = []
+					var v, dp;
+					for(var d in resp){
+						v = resp[d];
+						dp = new Date(Date.parse(d));
+						data.push([dp].concat(v));
+					}
+					table.addRows(data);
+					
+					atl2 = new google.visualization.AnnotatedTimeLine(document.getElementById('v2'));
+					atl2.draw(table, {'displayAnnotations': true, dateFormat: 'yyyy年MM月dd日 E', displayExactValues: true});
+					google.visualization.events.addListener(atl2, 'ready', function() {
+                        chart2Ready = true;
+                        $('#house_subtab2 .notes div').toggle();
+                        $('#shbtn').show();
+                        $('#shbtn').next().hide();
+					});
+                    
+                    /*
+                    var chart = new google.visualization.ImageLineChart(document.getElementById('v2'));
+                    chart.draw(table, {width: 1000, height: 500, min: 0});
+                    */
+				}, "json");
+			}
+			function d3(pa) {
+				//atl2 = null;
+				//chart2Ready = false;
+                
+				$.post('/house/monthlyhistory/', {'indices': pa.join(':')}, function(resp){
+					var table = new google.visualization.DataTable();
+					table.addColumn('date', '时间');
+                    jQuery.each(pa, function(){
+    					table.addColumn('number', cols2[this]);
+                    });
+
+					var data = []
+					var v, dp;
+					for(var d in resp){
+						v = resp[d];
+						dp = new Date(Date.parse(d));
+						data.push([dp].concat(v.slice(0, pa.length)));
+					}
+					table.addRows(data);
+					
+					atl3 = new google.visualization.AnnotatedTimeLine(document.getElementById('v3'));
+					atl3.draw(table, {'displayAnnotations': true, dateFormat: 'yyyy年MM月', numberFormats: '0.0#%'});
+					google.visualization.events.addListener(atl3, 'ready', function() {
+                        chart3Ready = true;
+                        $('#house_subtab1 .notes div').toggle();
+                        $('#shbtn2').show();
+                        $('#shbtn2').next().hide();
+					});
+                    /*
+                    var chart = new google.visualization.ImageLineChart(document.getElementById('v3'));
+                    chart.draw(table, {min: 0});
+                    */
+                    var pa2 = [], pa3 = [];
+                    jQuery.each(pa, function(){
+                        var i = parseInt(this);
+                        if(i >= 0 && i <= 55){
+                            pa2.push(4 * Math.floor(i / 8) + (i - 8 * Math.floor(i / 8)) % 4);
+                        }else{
+                            i -= 56;
+                            pa2.push(28 + 3 * Math.floor(i / 6) + (i - 6 * (Math.floor(i / 6))) % 3);
+                        }
+                    });
+                    //jQuery.uniuqe就xx的不能支持plain array吗？
+                    jQuery.each(pa2, function(){
+                        var i = parseInt(this);
+                        if(pa3.indexOf(i) == -1){
+                            pa3.push(i);
+                        }
+                    });
+					var table = new google.visualization.DataTable();
+					table.addColumn('date', '时间');
+                    jQuery.each(pa3, function(){
+    					table.addColumn('number', cols3[this]);
+                    });
+
+					data = []
+					for(var d in resp){
+						v = resp[d];
+						dp = new Date(Date.parse(d));
+						data.push([dp].concat(v.slice(pa.length)));
+					}
+					table.addRows(data);
+					
+					atl4 = new google.visualization.AnnotatedTimeLine(document.getElementById('v4'));
+					atl4.draw(table, {'displayAnnotations': true, dateFormat: 'yyyy年MM月', displayExactValues: true});
+					google.visualization.events.addListener(atl4, 'ready', function() {
+                        chart4Ready = true;
+                        $('#house_subtab1 .notes div').toggle();
+                        $('#shbtn2').show();
+                        $('#shbtn2').next().hide();
+					});
+				}, "json");
+			}
+		</script>
+  		<script type="text/javascript" src="/assets/jquery-1.3.2.min.js "></script>
+		<script type="text/javascript">
+            var cbmap2 = {}, cbmap3 = {};
+			$(document).ready(function(){
+    			$("#house_subtab2 :checkbox:not([id$='_all'])").each(function(i){
+                    cbmap2[this.id] = i;
+    			});
+    			$("#house_subtab1 :checkbox:not([id$='_all'])").each(function(i){
+                    cbmap3[this.id] = i;
+    			});
+				$('#place').keydown(function(e){
+					if(e.which == 13){
+						var self = this;
+        				$('#tq').html('<span style="font-size: 30px;">请等一下啊，看看有无「' + this.value + '」这个地方！</div>')
+						$.get("/weather/forecast/" + this.value + '/', function(data){
+							if (data) {
+								$('#tq').html(data);
+							}else{
+								$('#tq').html(self.value + '是哪里？');
+							}
+						});
+					}
+				});
+				$('#weather_tab :checkbox').each(function(i){
+					$(this).click(function(){
+						if (chart1Ready) {
+							if (this.checked) {
+								atl1.setVisibility(i, true);
+							}else{
+								atl1.setVisibility(i, false);
+							}
+						}
+					});
+				});
+				//$("#house_subtab1 :checkbox:not([id$='_all'])").each(function(i){
+                    /*
+					$(this).click(function(){
+						if (chart2Ready) {
+            				if(!this.checked){
+            					atl2.hideDataColumns(cbmap2[this.id]);
+            				}else{
+            					atl2.showDataColumns(cbmap2[this.id]);
+            				}
+                        }
+                    });
+                    */
+				//});
+                
+                $('#tab_container .tab_content, .subtab_content, #shbtn, #shbtn2').hide();
+                var t = $('.current_tab');
+                if(t){
+                    t.each(function(){
+                        var anchor = $(this).attr('href');
+                        $(anchor).show();
+                    });
+                }
+                jQuery.each(['tab', 'subtab'], function(){
+                    var n = this;
+                    $('.' + this).click(function(){
+                        $('.' + n + '_content').hide();
+                        $('.' + n).removeClass('current_' + n + '');
+                        $(this).addClass('current_' + n + '');
+                        $($(this).attr('href')).show();
+                    });
+                });
+                $('#shbtn, #shbtn2').click(function(){
+                    $(this).next().toggle(100);
+                });
+                $('.notes div:last-child').hide();
+                /*
+                $('#house_subtab2 .notes button').click(function(){
+    				var pa = [];
+    				$("#house_subtab2 :checkbox:not([id$='_all'])").each(function(){
+        				if(this.checked){
+        					pa.push(cbmap2[this.id]);
+        				}
+    				});
+                    if(pa.length){
+                        var p = $(this).parent();
+                        p.hide();
+                        p.siblings().show();
+                        d2(pa);
+                    }else{
+                        alert('请至少选择一项');
+                    }
+                });
+                $('#house_subtab1 .notes button').click(function(){
+    				var pa = [];
+    				$("#house_subtab1 :checkbox:not([id$='_all'])").each(function(){
+        				if(this.checked){
+        					pa.push(cbmap3[this.id]);
+        				}
+    				});
+                    if(pa.length){
+                        var p = $(this).parent();
+                        p.hide();
+                        p.siblings().show();
+                        d3(pa);
+                    }else{
+                        alert('请至少选择一项');
+                    }
+                });
+                */
+                $('.allcheckdiv :checkbox').click(function(){
+                    var id = this.id;
+                    id = id.substring(0, id.length - 4);
+                    var boxes = $(":checkbox[id^='" + id + "']");
+                    //var labels = $("label[for^='" + id + "']");
+                    if(this.checked){
+                        boxes.attr('checked', 'checked');
+                        //labels.css('color', '#000');
+                    }else{
+                        boxes.attr('checked', null);
+                        //labels.css('color', '#ccc');
+                    }
+                });
+                
+                //$('#signed_all, signed_rsd_all').click(function(){
+                
+                //});
+                
+                var hash = window.location.hash;
+                if(hash){
+                    var block = $(hash);
+                    if(block){
+                        var top = $('body').get(0);
+                        /*
+                        while(block.get(0) != top){
+                            block.show();
+                            block.parent().siblings().hide();
+                            block = block.parent().parent();
+                        }
+                        */
+                    }
+                }
+			});
+		</script>
+	</head>
+	<body>
+        <div id="panel">
+            <a href="#weather_tab" class="tab current_tab">天气</a>
+            <!--a href="#house_tab" class="tab">北京楼市（停止更新）</a-->
+        </div>
+        <div id="tab_container">
+            <div class="tab_content" id="weather_tab">
+        		输入地名，回车，看当前天气<input type="text" id="place" /> 
+        		<div id="tq"></div>
+        		<h1 style="clear: both;">天气历史数据</h1>
+        		<div><button onclick="drawVisualization('');" >北京</button><button onclick="drawVisualization('福州');" >福州</button></div>
+        		<div>
+        			<input type="checkbox" id="lwdbox" checked="checked"/><label for="lwdbox">温度（移动平均）</label>
+        			<!--input type="checkbox" id="hwdbox" checked="checked"/><label for="hwdbox">最高温度</label-->
+        			<input type="checkbox" id="flbox"/><label for="flbox">最大风力</label>
+        			<input type="checkbox" id="jsbox" checked="checked"/><label for="jsbox">最高降水</label>
+        			<input type="checkbox" id="sdbox"/><label for="sdbox">最大湿度</label>
+        		</div>
+        		<div id="visualization" style="width: 90%; height: 400px;"></div>
+            </div>
+            <div class="tab_content" id="house_tab">
+                <div id="subpanel1">
+                    <a href="#house_subtab1" class="subtab">按月统计</a>
+                    <a href="#house_subtab2" class="subtab current_subtab current_tab">日日统计</a>
+                </div>
+                <div id="subtab_container1">
+                    <div class="subtab_content" id="house_subtab1">
+                        <div id="shbtn2" class="shou_hide_btn">显示/隐藏统计项目列表</div>
+                        <div>
+                            <div class="forward_div">
+                                <div class="caption">可售期房统计</div>
+                                <input type="checkbox" id="ava_forward_amnt_hb" /><label for="ava_forward_amnt_hb">可售房屋套数环比</label>
+                                <input type="checkbox" id="ava_forward_area_hb" /><label for="ava_forward_area_hb">可售房屋面积环比</label>
+                                <input type="checkbox" id="ava_forward_rsd_amnt_hb" /><label for="ava_forward_rsd_amnt_hb">可售住宅套数环比</label>
+                                <input type="checkbox" id="ava_forward_rsd_area_hb" /><label for="ava_forward_rsd_area_hb">可售住宅面积环比</label>
+                                <input type="checkbox" id="ava_forward_amnt_tb" /><label for="ava_forward_amnt_tb">可售房屋套数同比</label>
+                                <input type="checkbox" id="ava_forward_area_tb" /><label for="ava_forward_area_tb">可售房屋面积同比</label>
+                                <input type="checkbox" id="ava_forward_rsd_amnt_tb" /><label for="ava_forward_rsd_amnt_tb">可售住宅套数同比</label>
+                                <input type="checkbox" id="ava_forward_rsd_area_tb" /><label for="ava_forward_rsd_area_tb">可售住宅面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="ava_forward_all" /><label for="ava_forward_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="forward_div">
+                                <div class="caption">期房网上认购</div>
+                                <input type="checkbox" id="offered_forward_amnt_hb" /><label for="offered_forward_amnt_hb">网上认购套数环比</label>
+                                <input type="checkbox" id="offered_forward_area_hb" /><label for="offered_forward_area_hb">网上认购面积环比</label>
+                                <input type="checkbox" id="offered_forward_rsd_amnt_hb" /><label for="offered_forward_rsd_amnt_hb">住宅认购套数环比</label>
+                                <input type="checkbox" id="offered_forward_rsd_area_hb" /><label for="offered_forward_rsd_area_hb">住宅认购面积环比</label>
+                                <input type="checkbox" id="offered_forward_amnt_tb" /><label for="offered_forward_amnt_tb">网上认购套数同比</label>
+                                <input type="checkbox" id="offered_forward_area_tb" /><label for="offered_forward_area_tb">网上认购面积同比</label>
+                                <input type="checkbox" id="offered_forward_rsd_amnt_tb" /><label for="offered_forward_rsd_amnt_tb">住宅认购套数同比</label>
+                                <input type="checkbox" id="offered_forward_rsd_area_tb" /><label for="offered_forward_rsd_area_tb">住宅认购面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="offered_forward_all" /><label for="offered_forward_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="forward_div">
+                                <div class="caption">期房网上签约</div>
+                                <input type="checkbox" id="signed_forward_amnt_hb" /><label for="signed_forward_amnt_hb">网上签约套数环比</label>
+                                <input type="checkbox" id="signed_forward_area_hb" /><label for="signed_forward_area_hb">网上签约面积环比</label>
+                                <input type="checkbox" id="signed_forward_rsd_amnt_hb" /><label for="signed_forward_rsd_amnt_hb">住宅签约套数环比</label>
+                                <input type="checkbox" id="signed_forward_rsd_area_hb" /><label for="signed_forward_rsd_area_hb">住宅签约面积环比</label>
+                                <input type="checkbox" id="signed_forward_amnt_tb" /><label for="signed_forward_amnt_tb">网上签约套数同比</label>
+                                <input type="checkbox" id="signed_forward_area_tb" /><label for="signed_forward_area_tb">网上签约面积同比</label>
+                                <input type="checkbox" id="signed_forward_rsd_amnt_tb" /><label for="signed_forward_rsd_amnt_tb">住宅签约套数同比</label>
+                                <input type="checkbox" id="signed_forward_rsd_area_tb" /><label for="signed_forward_rsd_area_tb">住宅签约面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="signed_forward_all" /><label for="signed_forward_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="forward_div">
+                                <div class="caption">期房预售批准</div>
+                                <input type="checkbox" id="approved_forward_amnt_hb" /><label for="approved_forward_amnt_hb">批准预售许可证环比</label>
+                                <input type="checkbox" id="approved_forward_area_hb" /><label for="approved_forward_area_hb">批准预售面积环比</label>
+                                <input type="checkbox" id="approved_forward_rsd_amnt_hb" /><label for="approved_forward_rsd_amnt_hb">批准住宅套数环比</label>
+                                <input type="checkbox" id="approved_forward_rsd_area_hb" /><label for="approved_forward_rsd_area_hb">批准住宅面积环比</label>
+                                <input type="checkbox" id="approved_forward_amnt_tb" /><label for="approved_forward_amnt_tb">批准预售许可证同比</label>
+                                <input type="checkbox" id="approved_forward_area_tb" /><label for="approved_forward_area_tb">批准预售面积同比</label>
+                                <input type="checkbox" id="approved_forward_rsd_amnt_tb" /><label for="approved_forward_rsd_amnt_tb">批准住宅套数同比</label>
+                                <input type="checkbox" id="approved_forward_rsd_area_tb" /><label for="approved_forward_rsd_area_tb">批准住宅面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="signed_forward_all" /><label for="signed_forward_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="completed_div">
+                                <div class="caption">未签约现房统计</div>
+                                <input type="checkbox" id="unsigned_completed_amnt_hb" /><label for="unsigned_completed_amnt_hb">未签约套数环比</label>
+                                <input type="checkbox" id="unsigned_completed_area_hb" /><label for="unsigned_completed_area_hb">未签约面积环比</label>
+                                <input type="checkbox" id="unsigned_completed_rsd_amnt_hb" /><label for="unsigned_completed_rsd_amnt_hb">未签约住宅套数环比</label>
+                                <input type="checkbox" id="unsigned_completed_rsd_area_hb" /><label for="unsigned_completed_rsd_area_hb">未签约住宅面积环比</label>
+                                <input type="checkbox" id="unsigned_completed_amnt_tb" /><label for="unsigned_completed_amnt_tb">未签约套数同比</label>
+                                <input type="checkbox" id="unsigned_completed_area_tb" /><label for="unsigned_completed_area_tb">未签约面积同比</label>
+                                <input type="checkbox" id="unsigned_completed_rsd_amnt_tb" /><label for="unsigned_completed_rsd_amnt_tb">未签约住宅套数同比</label>
+                                <input type="checkbox" id="unsigned_completed_rsd_area_tb" /><label for="unsigned_completed_rsd_area_tb">未签约住宅面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="unsigned_completed_all" /><label for="unsigned_completed_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="completed_div">
+                                <div class="caption">现房网上认购</div>
+                                <input type="checkbox" id="offered_completed_amnt_hb" /><label for="offered_completed_amnt_hb">网上认购套数环比</label>
+                                <input type="checkbox" id="offered_completed_area_hb" /><label for="offered_completed_area_hb">网上认购面积环比</label>
+                                <input type="checkbox" id="offered_completed_rsd_amnt_hb" /><label for="offered_completed_rsd_amnt_hb">住宅认购套数环比</label>
+                                <input type="checkbox" id="offered_completed_rsd_area_hb" /><label for="offered_completed_rsd_area_hb">住宅认购面积环比</label>
+                                <input type="checkbox" id="offered_completed_amnt_tb" /><label for="offered_completed_amnt_tb">网上认购套数同比</label>
+                                <input type="checkbox" id="offered_completed_area_tb" /><label for="offered_completed_area_tb">网上认购面积同比</label>
+                                <input type="checkbox" id="offered_completed_rsd_amnt_tb" /><label for="offered_completed_rsd_amnt_tb">住宅认购套数同比</label>
+                                <input type="checkbox" id="offered_completed_rsd_area_tb" /><label for="offered_completed_rsd_area_tb">住宅认购面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="offered_completed_all" /><label for="offered_completed_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="completed_div">
+                                <div class="caption">现房网上签约</div>
+                                <input type="checkbox" id="signed_completed_amnt_hb" /><label for="signed_completed_amnt_hb">网上签约套数环比</label>
+                                <input type="checkbox" id="signed_completed_area_hb" /><label for="signed_completed_area_hb">网上签约面积环比</label>
+                                <input type="checkbox" id="signed_completed_rsd_amnt_hb" /><label for="signed_completed_rsd_amnt_hb">住宅签约套数环比</label>
+                                <input type="checkbox" id="signed_completed_rsd_area_hb" /><label for="signed_completed_rsd_area_hb">住宅签约面积环比</label>
+                                <input type="checkbox" id="signed_completed_amnt_tb" /><label for="signed_completed_amnt_tb">网上签约套数同比</label>
+                                <input type="checkbox" id="signed_completed_area_tb" /><label for="signed_completed_area_tb">网上签约面积同比</label>
+                                <input type="checkbox" id="signed_completed_rsd_amnt_tb" /><label for="signed_completed_rsd_amnt_tb">住宅签约套数同比</label>
+                                <input type="checkbox" id="signed_completed_rsd_area_tb" /><label for="signed_completed_rsd_area_tb">住宅签约面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="signed_completed_all" /><label for="signed_completed_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="completed_div">
+                                <div class="caption">现房项目情况</div>
+                                <input type="checkbox" id="misc_completed_prj_amnt_hb" /><label for="misc_completed_prj_amnt_hb">现房项目个数环比</label>
+                                <input type="checkbox" id="misc_completed_bld_amnt_hb" /><label for="misc_completed_bld_amnt_hb">楼栋个数环比</label>
+                                <input type="checkbox" id="misc_completed_init_area_hb" /><label for="misc_completed_init_area_hb">初始登记面积环比</label>
+                                <input type="checkbox" id="misc_completed_prj_amnt_tb" /><label for="misc_completed_prj_amnt_tb">现房项目个数同比</label>
+                                <input type="checkbox" id="misc_completed_bld_amnt_tb" /><label for="misc_completed_bld_amnt_tb">楼栋个数同比</label>
+                                <input type="checkbox" id="misc_completed_init_area_tb" /><label for="misc_completed_init_area_tb">初始登记面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="misc_completed_all" /><label for="misc_completed_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="resold_div">
+                                <div class="caption">可售存量房统计</div>
+                                <input type="checkbox" id="ava_resold_amnt_hb" /><label for="ava_resold_amnt_hb">可售房源套数环比</label>
+                                <input type="checkbox" id="ava_resold_rsd_amnt_hb" /><label for="ava_resold_rsd_amnt_hb">可售住宅套数环比</label>
+                                <input type="checkbox" id="ava_resold_rsd_area_hb" /><label for="ava_resold_rsd_area_hb">可售住宅面积环比</label>
+                                <input type="checkbox" id="ava_resold_amnt_tb" /><label for="ava_resold_amnt_tb">可售房源套数同比</label>
+                                <input type="checkbox" id="ava_resold_rsd_amnt_tb" /><label for="ava_resold_rsd_amnt_tb">可售住宅套数同比</label>
+                                <input type="checkbox" id="ava_resold_rsd_area_tb" /><label for="ava_resold_rsd_area_tb">可售住宅面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="ava_resold_all" /><label for="ava_resold_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="resold_div">
+                                <div class="caption">新注册存量房信息</div>
+                                <input type="checkbox" id="new_reg_resold_amnt_hb" /><label for="new_reg_resold_amnt_hb">新发布房源套数环比</label>
+                                <input type="checkbox" id="new_reg_resold_rsd_amnt_hb" /><label for="new_reg_resold_rsd_amnt_hb">新发布住宅套数环比</label>
+                                <input type="checkbox" id="new_reg_resold_rsd_area_hb" /><label for="new_reg_resold_rsd_area_hb">新发布住宅面积环比</label>
+                                <input type="checkbox" id="new_reg_resold_amnt_tb" /><label for="new_reg_resold_amnt_tb">新发布房源套数同比</label>
+                                <input type="checkbox" id="new_reg_resold_rsd_amnt_tb" /><label for="new_reg_resold_rsd_amnt_tb">新发布住宅套数同比</label>
+                                <input type="checkbox" id="new_reg_resold_rsd_area_tb" /><label for="new_reg_resold_rsd_area_tb">新发布住宅面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="new_reg_resold_all" /><label for="new_reg_resold_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="resold_div">
+                                <div class="caption">存量房签约情况</div>
+                                <input type="checkbox" id="signed_resold_amnt_hb" /><label for="signed_resold_amnt_hb">网上签约套数环比</label>
+                                <input type="checkbox" id="signed_resold_rsd_amnt_hb" /><label for="signed_resold_rsd_amnt_hb">住宅签约套数环比</label>
+                                <input type="checkbox" id="signed_resold_rsd_area_hb" /><label for="signed_resold_rsd_area_hb">住宅签约面积环比</label>
+                                <input type="checkbox" id="signed_resold_amnt_tb" /><label for="signed_resold_amnt_tb">网上签约套数同比</label>
+                                <input type="checkbox" id="signed_resold_rsd_amnt_tb" /><label for="signed_resold_rsd_amnt_tb">住宅签约套数同比</label>
+                                <input type="checkbox" id="signed_resold_rsd_area_tb" /><label for="signed_resold_rsd_area_tb">住宅签约面积同比</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="signed_resold_all" /><label for="signed_resold_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="notes">
+                                <div><button>请按我。请按我。</button></div>
+                                <div>等一等，马上好~</div>
+                            </div>
+                        </div>
+                		<div id="v3" style="width: 1000px; height: 500px;"></div>
+                		<div id="v4" style="width: 1000px; height: 500px;"></div>
+                    </div>
+                    <div class="subtab_content" id="house_subtab2">
+                        <div id="shbtn" class="shou_hide_btn">显示/隐藏统计项目列表</div>
+                        <div>
+                            <div class="forward_div">
+                                <div class="caption">可售期房统计</div>
+                                <input type="checkbox" id="ava_forward_amnt" /><label for="ava_forward_amnt">可售房屋套数</label>
+                                <input type="checkbox" id="ava_forward_area" /><label for="ava_forward_area">可售房屋面积</label>
+                                <input type="checkbox" id="ava_forward_rsd_amnt" /><label for="ava_forward_rsd_amnt">可售住宅套数</label>
+                                <input type="checkbox" id="ava_forward_rsd_area" /><label for="ava_forward_rsd_area">可售住宅面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="ava_forward_all" /><label for="ava_forward_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="forward_div">
+                                <div class="caption">期房网上认购</div>
+                                <input type="checkbox" id="offered_forward_amnt" /><label for="offered_forward_amnt">网上认购套数</label>
+                                <input type="checkbox" id="offered_forward_area" /><label for="offered_forward_area">网上认购面积</label>
+                                <input type="checkbox" id="offered_forward_rsd_amnt" /><label for="offered_forward_rsd_amnt">住宅认购套数</label>
+                                <input type="checkbox" id="offered_forward_rsd_area" /><label for="offered_forward_rsd_area">住宅认购面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="offered_forward_all" /><label for="offered_forward_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="forward_div">
+                                <div class="caption">期房网上签约</div>
+                                <input type="checkbox" id="signed_forward_amnt" /><label for="signed_forward_amnt">网上签约套数</label>
+                                <input type="checkbox" id="signed_forward_area" /><label for="signed_forward_area">网上签约面积</label>
+                                <input type="checkbox" id="signed_forward_rsd_amnt" /><label for="signed_forward_rsd_amnt">住宅签约套数</label>
+                                <input type="checkbox" id="signed_forward_rsd_area" /><label for="signed_forward_rsd_area">住宅签约面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="signed_forward_all" /><label for="signed_forward_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="completed_div">
+                                <div class="caption">未签约现房统计</div>
+                                <input type="checkbox" id="unsigned_completed_amnt" /><label for="unsigned_completed_amnt">未签约套数</label>
+                                <input type="checkbox" id="unsigned_completed_area" /><label for="unsigned_completed_area">未签约面积</label>
+                                <input type="checkbox" id="unsigned_completed_rsd_amnt" /><label for="unsigned_completed_rsd_amnt">未签约住宅套数</label>
+                                <input type="checkbox" id="unsigned_completed_rsd_area" /><label for="unsigned_completed_rsd_area">未签约住宅面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="unsigned_completed_all" /><label for="unsigned_completed_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="completed_div">
+                                <div class="caption">现房网上认购</div>
+                                <input type="checkbox" id="offered_completed_amnt" /><label for="offered_completed_amnt">网上认购套数</label>
+                                <input type="checkbox" id="offered_completed_area" /><label for="offered_completed_area">网上认购面积</label>
+                                <input type="checkbox" id="offered_completed_rsd_amnt" /><label for="offered_completed_rsd_amnt">住宅认购套数</label>
+                                <input type="checkbox" id="offered_completed_rsd_area" /><label for="offered_completed_rsd_area">住宅认购面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="offered_completed_all" /><label for="offered_completed_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="completed_div">
+                                <div class="caption">现房网上签约</div>
+                                <input type="checkbox" id="signed_completed_amnt" /><label for="signed_completed_amnt">网上签约套数</label>
+                                <input type="checkbox" id="signed_completed_area" /><label for="signed_completed_area">网上签约面积</label>
+                                <input type="checkbox" id="signed_completed_rsd_amnt" /><label for="signed_completed_rsd_amnt">住宅签约套数</label>
+                                <input type="checkbox" id="signed_completed_rsd_area" /><label for="signed_completed_rsd_area">住宅签约面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="signed_completed_all" /><label for="signed_completed_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="completed_div">
+                                <div class="caption">现房项目情况</div>
+                                <input type="checkbox" id="misc_completed_prj_amnt" /><label for="misc_completed_prj_amnt">现房项目个数</label>
+                                <input type="checkbox" id="misc_completed_bld_amnt" /><label for="misc_completed_bld_amnt">楼栋个数</label>
+                                <input type="checkbox" id="misc_completed_init_area" /><label for="misc_completed_init_area">初始登记面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="misc_completed_all" /><label for="misc_completed_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="resold_div">
+                                <div class="caption">可售存量房统计</div>
+                                <input type="checkbox" id="ava_resold_amnt" /><label for="ava_resold_amnt">可售房源套数</label>
+                                <input type="checkbox" id="ava_resold_rsd_amnt" /><label for="ava_resold_rsd_amnt">可售住宅套数</label>
+                                <input type="checkbox" id="ava_resold_rsd_area" /><label for="ava_resold_rsd_area">可售住宅面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="ava_resold_all" /><label for="ava_resold_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="resold_div">
+                                <div class="caption">新注册存量房信息</div>
+                                <input type="checkbox" id="new_reg_resold_amnt" /><label for="new_reg_resold_amnt">新发布房源套数</label>
+                                <input type="checkbox" id="new_reg_resold_rsd_amnt" /><label for="new_reg_resold_rsd_amnt">新发布住宅套数</label>
+                                <input type="checkbox" id="new_reg_resold_rsd_area" /><label for="new_reg_resold_rsd_area">新发布住宅面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="new_reg_resold_all" /><label for="new_reg_resold_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <div class="resold_div">
+                                <div class="caption">存量房签约情况</div>
+                                <input type="checkbox" id="signed_resold_amnt" /><label for="signed_resold_amnt">网上签约套数</label>
+                                <input type="checkbox" id="signed_resold_rsd_amnt" /><label for="signed_resold_rsd_amnt">住宅签约套数</label>
+                                <input type="checkbox" id="signed_resold_rsd_area" /><label for="signed_resold_rsd_area">住宅签约面积</label>
+                                <!-- <div class="allcheckdiv"><input type="checkbox" id="signed_resold_all" /><label for="signed_resold_all">本行全选 / 全不选</label></div> -->
+                            </div>
+                            <!--
+                            <div>
+                                <input type="checkbox" id="signed_all" /><label for="signed_all">全选网签套数</label>
+                                <input type="checkbox" id="signed_rsd_all" /><label for="signed_rsd_all">全选网签住宅套数</label>
+                            </div>
+                            -->
+                            <div><input type="checkbox" id="hide_weekend1_all" checked="checked" /><label for="hide_weekend1">不显示周末数据（这样曲线较为美观）</label></div>
+                            <p>*数据来自<a href="http://bjfdc.bjjs.gov.cn">北京市房地产交易管理网</a>，有<em>两天</em>时延。
+                            <div class="notes">
+                                <div>
+                                    <button>是的，我保证会耐心等待，请开始，谢谢。</button>
+                                </div>
+                                <div>
+                                请耐心等待，要知道pizzamx不知花了多少时间来调试这个小东西，相比之下您这点时间算不了什么。在此期间您可以切换到别的程序，浏览器不会死掉的，顶多十分钟没有响应。但是如果您不耐烦地关掉了它，不仅刚才的等待浪费了，接下来的精彩您也无法见证。
+                                </div>
+                            </div>
+                        </div>
+                		<div id="v2" style="width: 95%; height: 500px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            try {
+                var pageTracker = _gat._getTracker("UA-102907-5");
+                pageTracker._trackPageview();
+            } catch(err) {}
+        </script>
+        <!--[if lte IE 6]>
+        	<script src="http://letskillie6.googlecode.com/svn/trunk/letskillie6.zh_CN.pack.js"></script>
+        <![endif]-->
+	</body>
+</html>

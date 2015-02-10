@@ -1,0 +1,45 @@
+/*
+	RESET STYLE
+	@see http://developer.yahoo.com/yui/reset/
+*/
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td { margin: 0; padding: 0; }
+table { border-collapse: collapse; border-spacing: 0; }
+fieldset, img { border: 0; }
+address, caption, cite, code, dfn, em, th, var { font-style: normal; font-weight: normal; }
+ol, ul { list-style: none; }
+caption, th { text-align: left; }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal; }
+q:before, q:after { content :''; }
+abbr, acronym { border: 0; }
+
+/*
+	TAG-LEVEL STYLES
+*/
+
+body { text-align: left; font: 12px verdana, arial, sans-serif; color: #545454; background: #eee; }
+a { text-decoration: none; }
+a:link, a:visited, a:active {  }
+a:hover {  }
+p { margin-bottom: 1em; }
+code, pre { font-family: Consolas, 'Courier New', monospace; font-size: 1em; color: #7ca653; }
+h1 { font-size: 18px; }
+
+#panel, #subpanel1 { width: 26px; float: left; }
+.tab, .subtab { display:block; padding: 10px 3px; margin: 5px 0; color: #000; text-align: center; }
+.current_tab { background: #fff; }
+.current_subtab { font-weight: bold; }
+#tab_container, #subtab_container1 { margin-left: 26px; position: relative; background: #fff; }
+.tab_content, .subtab_content { background: #fff; position: absolute; left: 0; top: 0; width: 100%; }
+#house_tab { background: #fff; }
+label, div { font-size: 12px; font-family: arial, verdana, sans-serif; }
+.caption { font-size: 14px; padding: 10px 5px; float: left; width: 120px; }
+#house_tab label { line-height: 34px; }
+.forward_div, .completed_div, .resold_div { clear: both; position: relative; /*border-left: 5px solid #f00;*/ margin-bottom: 2px; }
+.forward_div { background: #c0ffc0; }
+.completed_div { background: #ffc0c0; }
+.resold_div { background: #c0c0ff; }
+.allcheckdiv { position: absolute; top: 0; right: 0; }
+.notes { width: 600px; margin: 0 auto; text-align: center; font-size: 14px; line-height: 180%; }
+.notes button { font-size: 16px; border: 5px outset #eee; background: #ff0; cursor: pointer; }
+.shou_hide_btn { width: 150px; text-align: center; color: #fff; background: #036; cursor: pointer; border: 2px outset #000; }

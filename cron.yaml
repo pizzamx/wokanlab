@@ -1,0 +1,11 @@
+cron:
+- description: update beijing
+  url: /weather/history/
+  schedule: every day 23:40
+  timezone: Asia/Shanghai
+
+- description: update fuzhou
+  url: /weather/history/%E7%A6%8F%E5%B7%9E
+  schedule: every day 23:40
+  timezone: Asia/Shanghai
+
