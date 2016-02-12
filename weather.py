@@ -257,7 +257,9 @@ class History(TQ):
         self.loadPickle()
         code = self.search(place)
         data = TQModel.all().filter('city =', code).order('date')
-        result = {'count': data.count(), 'data': {}}
+        result = {'count': data.count(), 'data': []}
+        years = [];
+        int_data = []   #interim data
         for tq in data:
             xml = re.sub(r'city=".*?"', '', tq.xml)
             dom = cElementTree.fromstring(xml)
@@ -277,7 +279,23 @@ class History(TQ):
                 except:     #可能抓取数据错误……
                     pass
                     #r[int(t.get('h'))] = [0] * 4
-            result['data'][tq.date.ctime()] = r
+            r.insert(0, '2010/%d/%d' % (tq.date.month, tq.date.day))
+            r.append(tq.date.year)
+            if not tq.date.year in years:
+                years.append(tq.date.year)
+            int_data.append(r)
+        result['years'] = years
+        f_data = {} #final data
+        for d in int_data:
+            if f_data.has_key(d[0]):
+                rec = f_data[d[0]]
+            else:
+                rec = f_data[d[0]] = []
+                for x in years: rec.append(None)
+            rec[years.index(d[6])] = [d[1], d[2], d[3], d[4], d[5]]
+        result['data'] = f_data
+        
+        #TODO: header expire set
         self.response.out.write(simplejson.dumps(result))
 
 if __name__ == '__main__':
