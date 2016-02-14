@@ -5,8 +5,10 @@ from google.appengine.api import mail
 from datetime import tzinfo, timedelta, datetime, date
 from xml.etree import cElementTree
 
-from django.utils import simplejson
-from google.appengine.ext import webapp
+#from django.utils import simplejson
+import json as simplejson
+
+import webapp2
 from google.appengine.ext import db
 
 class UTC(tzinfo):
@@ -20,7 +22,7 @@ class CST(tzinfo):
         return timedelta(0)
 
 
-class TQ(webapp.RequestHandler):
+class TQ(webapp2.RequestHandler):
     CODE_DATA_URL = 'http://weather.com.cn/data/listinfo/city%s.xml'
     WEATHER_DATA_URL = 'http://m.weather.com.cn/data/%s.html'
     LATEST_DATA_URL = 'http://weather.com.cn/data/sk/%s.html'
@@ -193,9 +195,9 @@ class Forecast(TQ):
                         <h2 style="font-size: 70px; margin:0; letter-spacing: 10px;">%s</h2>
                         <div style="">%s</div><div style="">%s</div><div style="">%s</div>
                         </div><div><a href="/weather/forecast/%s/json" target="_blank">I could use a cross-domain callback, thx yo!</a></div>''' % (self.LEGEND_FILE % self.legend_map[legend], data['weather1'].encode('utf-8'), data['city'].encode('utf-8'),                                                    data['date_y'].encode('utf-8'), data['weather1'].encode('utf-8'), data['temp1'].encode('utf-8'), data['city'].encode('utf-8'))
-            self.response.out.write(output)
+            self.response.write(output)
         else:
-            self.response.out.write('')
+            self.response.write('')
 
 class TQModel(db.Model):
     date = db.DateTimeProperty()
@@ -249,7 +251,7 @@ class History(TQ):
             m = TQModel(date=ptime, xml=db.Text(stream, encoding="utf-8"), city=code)
             m.put()
             
-            self.response.out.write(ptime)
+            self.response.write(ptime)
             for segm in dom.findall('.//qw'):
                 pass
             
@@ -296,7 +298,7 @@ class History(TQ):
         result['data'] = f_data
         
         #TODO: header expire set
-        self.response.out.write(simplejson.dumps(result))
+        self.response.write(simplejson.dumps(result))
 
 if __name__ == '__main__':
     tq = TQ()
