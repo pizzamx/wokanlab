@@ -258,7 +258,7 @@ class History(TQ):
     def post(self, place):
         self.loadPickle()
         code = self.search(place)
-        data = TQModel.all().filter('city =', code).order('date')
+        data = TQModel.query(TQModel.city = code).order(TQModel.date)
         result = {'count': data.count(), 'data': []}
         years = [];
         int_data = []   #interim data
